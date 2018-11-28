@@ -15,6 +15,8 @@ set(SOURCES
 	Src/shader.cpp
 	Src/main.cpp
 	Src/graph.cpp
+	Src/wall.cpp
+	Src/stb_image.cpp
 	)
 	
 set(HEADERS
@@ -29,6 +31,8 @@ set(HEADERS
 	Headers/primitive.h
 	Headers/shader.h
 	Headers/graph.h
+	Headers/wall.h
+	Headers/stb_image.h
 	)
 
 

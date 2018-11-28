@@ -4,7 +4,14 @@ Entity::Entity() {
 	mX = mY = 0;
 	angle = 0;
 	EPSILON = 0.01;
+
+
+
+
+
+
 	initializeShader();
+
 }
 
 void Entity::initializeShader() {
@@ -16,34 +23,26 @@ void Entity::initializeShader() {
 void Entity::applyTransitions() {
 	//todo
 	glm::mat4 transform;
-	glm::mat4 view;
-	glm::mat4 projection;
-	//float tmp = 0.05;
-	//if (angle != 0)tmp = 0.05;
-	transform = glm::translate(transform, glm::vec3(mX, mY , 0.5));
 
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	projection = glm::perspective(glm::radians(45.0f), (float)500 / (float)500, 0.1f, 100.0f);
+	transform = glm::translate(transform, glm::vec3(mX, mY, 0.5));
+
 
 
 	GLint transformLoc = glGetUniformLocation(shader->ID, "transform");
-	GLint viewLoc = glGetUniformLocation(shader->ID, "view");
-
 
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
-	shader->setMat4("projection", projection);
 
-	
+
 	//transform = glm::rotate(transform, (float)glfwGetTime()*glm::radians(-55.0f), glm::vec3(0.0f, 0.0f, 0.5f));
-	//transformLoc = glGetUniformLocation(shader->ID, "transform");
-	//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+	transformLoc = glGetUniformLocation(shader->ID, "transform");
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 }
 
 void Entity::outline() {
 	if (COLORED_FLAG)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	shader->use();
+	glBindTexture(GL_TEXTURE_2D, texture);
 	glBindVertexArray(VAO);
 	applyTransitions();
 	glDrawElements(GL_TRIANGLES, indeciesCount, GL_UNSIGNED_INT, 0); //why 32 though
@@ -54,23 +53,28 @@ void Entity::outline() {
 void Entity::assemble(std::vector<Primitive*> carcass, int points) {
 	indeciesCount = carcass.size() * 6;  // two triangles for a square
 
-	GLfloat* vertices = new GLfloat[carcass.size() * points * 3];  //points in single primitive, times {x, y, z}
+	GLfloat* vertices = new GLfloat[carcass.size() * points * 5];  //points in single primitive, times {x, y, z} + {texX, texY}
 
 	int index = 0; //account for outer loop
+
+
+
 	for (Primitive* obj : carcass)
 	{
-		for (int a = 0; a < obj->getVertices() * 3; ++a)
+		for (int a = 0; a < obj->getVertices() * 5; ++a)
 		{
 			vertices[index] = obj->getVertexAt(a);
-			++index;
+			++index; 
 
 		}
+
+
 	}
-
-
+ 
 	GLuint* indecies = new GLuint[indeciesCount];
 	constructIndecies(indecies, indeciesCount);
-	setBuffers(vertices, carcass.size()*points * 3, indecies, indeciesCount);
+ 
+	setBuffers(vertices, carcass.size()*points * 5, indecies, indeciesCount);
 
 	delete[] vertices;
 	delete[] indecies;
@@ -105,8 +109,34 @@ void Entity::setBuffers(GLfloat* vertecies, int vSize, GLuint* indecies, int iSi
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, iSize * sizeof(GLuint), indecies, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// set the texture wrapping/filtering options (on the currently bound texture object)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// load and generate the texture
+	int width, height, nrChannels;
+	unsigned char *data = stbi_load("C:/Users/Michael/Documents/GitHub/Bomberman/container.jpg", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
 
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

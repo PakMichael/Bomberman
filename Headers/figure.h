@@ -15,9 +15,10 @@
 extern bool blueprints[7][8];
 
 
-class Figure : public Subordinate, public Entity{
+class Figure : public Subordinate, public Entity {
 
-
+	float relativeWidth;
+	float relativeHeight;
 	int blueprintIndex;
 	int directionKey;
 	float speed;
@@ -35,7 +36,7 @@ public:
 public:
 	Figure(float initialX, float initialY, float height, float width);
 	~Figure();
-	
+
 	void boostDown();
 	void moveNTimesBy(int x, int y);
 	void moveRight();

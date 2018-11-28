@@ -9,13 +9,13 @@
 #include "primitive.h"
 #include "shader.h"
 #include <vector>
+#include <stb_image.h>
 
 class Entity{
 
 protected:
 
-	float relativeWidth;
-	float relativeHeight;
+
 	float mX, mY;
 	float angle;
 	float EPSILON;
@@ -23,6 +23,7 @@ protected:
 private:
 	Shader* shader;
 	GLuint VAO;
+	GLuint texture;
 public:
 	Entity();
 	void outline();

@@ -7,11 +7,12 @@
 #include "subordinate.h"
 #include <algorithm>
 #include <graph.h>
+#include "wall.h"
 
 
 class Backstage : public Entity, public Subordinate {
 	bool map[20][20];
-	std::vector<Figure*> borders;
+	std::vector<Wall*> walls;
 	Graph* g;
 
 public:
@@ -22,6 +23,7 @@ public:
 private:
 	void constructCarcass();
 	void constructLabyrinth();
+	void constructWalls();
 };
 
 

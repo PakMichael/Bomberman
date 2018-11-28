@@ -108,6 +108,23 @@ void Rectangle::build() {
 			matrix[index++] = x + width * b; //x
 			matrix[index++] = y - height * a; //y
 			matrix[index++] = 0;//z			
+
+			if (index == 3) {
+				matrix[index++] = -1.0f;
+				matrix[index++] = 1.0f;
+			}
+			if (index == 8) {
+				matrix[index++] = 1.0f;
+				matrix[index++] = 1.0f;
+			}
+			if (index == 13) {
+				matrix[index++] = -1.0f;
+				matrix[index++] = -1.0f;
+			}
+			if (index == 18) {
+				matrix[index++] = 1.0f;
+				matrix[index++] = -1.0f;
+			}
 		}
 }
 

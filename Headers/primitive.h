@@ -42,7 +42,7 @@ class Square : public Primitive {
 private:
 	float sidesSize;
 protected:
-	float matrix[12]; // {x, y ,z=0} * 4
+	float matrix[20]; // {x, y ,z=0} * 4 +{tX, tY}*4 
 
 public:
 	Square();
