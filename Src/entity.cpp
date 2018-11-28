@@ -39,13 +39,12 @@ void Entity::applyTransitions() {
 }
 
 void Entity::outline() {
-	if (COLORED_FLAG)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	shader->use();
-	glBindTexture(GL_TEXTURE_2D, texture);
+
 	glBindVertexArray(VAO);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	applyTransitions();
-	glDrawElements(GL_TRIANGLES, indeciesCount, GL_UNSIGNED_INT, 0); //why 32 though
+	glDrawElements(GL_TRIANGLES, indeciesCount, GL_UNSIGNED_INT, 0);  
 	glBindVertexArray(0);
 }
 
@@ -115,20 +114,31 @@ void Entity::setBuffers(GLfloat* vertecies, int vSize, GLuint* indecies, int iSi
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
+	loadTexture(texturePath);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+}
+
+void Entity::loadTexture(char * path)
+{
 
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	// load and generate the texture
 	int width, height, nrChannels;
-	unsigned char *data = stbi_load("C:/Users/Michael/Documents/GitHub/Bomberman/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char *data = stbi_load(path, &width, &height, &nrChannels, 0);
 	if (data)
 	{
+		std::cout << width << std::endl;
+		std::cout << height << std::endl;
+
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
@@ -137,9 +147,5 @@ void Entity::setBuffers(GLfloat* vertecies, int vSize, GLuint* indecies, int iSi
 		std::cout << "Failed to load texture" << std::endl;
 	}
 	stbi_image_free(data);
-
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
 
 }

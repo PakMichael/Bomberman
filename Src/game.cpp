@@ -9,7 +9,8 @@ void Game::init() {
 	srand(std::time(0));
 
 	gameField = new Backstage(relativeCellSizeX, relativeCellSizeY);
-	makeRemark("updBackstage", gameField);
+	makeRemark("updBackstage", gameField->getWall());
+	makeRemark("updCorridor", gameField->getCorridor());
 
 
 	createFigure();
@@ -59,30 +60,15 @@ void Game::induceMovement() {
 		//figureFlying->setHitEarth();
 		break;
 	}
-	if (!gameField->collisionOccured(figureFlying)) {
+	//if (!gameField->getWall()->intersects(figureFlying->getRectangle())) {
 		figureFlying->fulfilProphecy();
 		setFlag("redrawAll", true);
-	}
-	else {
-		figureFlying->discardProphecy();
-
-	}
-	//if (!gameField.collisionOccured(figureFlying))
-	//{
-	//	figureFlying->fulfilProphecy();
-	//	setFlag("redrawAll", true);
-	//	/*	float tmpx;
-	//		float tmpy;
-	//		figureFlying->getCoordinates(tmpx, tmpy);
-	//		std::cout << gameField->scaledPositionToIndex(tmpy) << std::endl;*/
-	//	return;
 	//}
-	//else
-	//{
+	//else {
 	//	figureFlying->discardProphecy();
-	//	/*gameField->consumeFigure(figureFlying);
-	//	notify("immobilized");*/
+
 	//}
+ 
 
 }
 void Game::initializeRemarks() {

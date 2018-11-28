@@ -8,7 +8,8 @@ bool blueprints[7][8] = {   /* sorry for this :C */
 
 
 Figure::Figure(float initialX, float initialY, float height, float width) {
-
+	texturePath = "Textures/Bman_F_f00.PNG";
+	//texturePath = "C:/Users/Michael/Documents/GitHub/Bomberman/container.jpg";
 	this->relativeHeight = height;
 	this->relativeWidth = width;
 

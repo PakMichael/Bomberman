@@ -5,45 +5,31 @@ float indx2Grid(int index, float cellSize, int offsetIndex = 0) {
 }
 
 Backstage::Backstage(float relativeCellSizeX, float relativeCellSizeY) {
-
+	relativeCellWidth = relativeCellSizeX;
+	relativeCellHeight = relativeCellSizeY;
+	wall = new Block();
+	corridor = new Block("Textures/BackgroundTile.png");
 	constructLabyrinth();
 	constructWalls();
-	for (int a = 0; a < 22; ++a) {
-		walls.push_back(new Wall(indx2Grid(a, relativeCellSizeX, -10), 11 * relativeCellSizeY, relativeCellSizeX, relativeCellSizeY)); // ------
-		walls.push_back(new Wall(-11 * relativeCellSizeX, indx2Grid(a, relativeCellSizeY, -10), relativeCellSizeX, relativeCellSizeY)); // |
-		walls.push_back(new Wall(10 * relativeCellSizeX, indx2Grid(a, relativeCellSizeY, -10), relativeCellSizeX, relativeCellSizeY)); //       |
-		walls.push_back(new Wall(indx2Grid(a, relativeCellSizeX, -10), -10 * relativeCellSizeY, relativeCellSizeX, relativeCellSizeY)); // _____ 
-	}
+	wall->constructCarcass();
+	corridor->constructCarcass();
 
-	for (int a = 0; a < 20; ++a) {
-		for (int b = 0; b < 20; ++b) {
-			if (!map[a][b]) {
-				walls.push_back(new Wall(indx2Grid(b, relativeCellSizeX, -10), indx2Grid(19 - a, relativeCellSizeY, -9), relativeCellSizeX, relativeCellSizeY));
-			}
-		}
-	}
-	constructCarcass();
+
 }
 
-bool Backstage::collisionOccured(Figure* activeObj)
+
+
+Block * Backstage::getWall()
 {
-	//for (Wall* wall : walls) {
-	//	if (activeObj->intersects(wall->rectangle)) {
-	//		return true;
-	//	}
-	//}
-	return false;
+	return wall;
 }
 
-void Backstage::constructCarcass() {
-
-	std::vector<Primitive*> carcass;
-	//for (int a = 0; a < borders.size(); ++a)
-	//	carcass.push_back(borders[a]->getRectangle());
-	for (int a = 0; a < walls.size(); ++a)
-		carcass.push_back(walls[a]->rectangle);
-	assemble(carcass, 4);
+Block * Backstage::getCorridor()
+{
+	return corridor;
 }
+
+
 
 void Backstage::constructLabyrinth()
 {
@@ -91,18 +77,44 @@ void Backstage::constructLabyrinth()
 void Backstage::constructWalls()
 {
 
-	for (int b = 0; b < 7; ++b) {
-		int index = rand() % 20;
-		for (int a = 0; a < 20; ++a) {
-			map[a][index] = false;
-			map[a][index] = false;
-			map[index][a] = false;
-			map[index][a] = false;
-		}
+	//for (int b = 0; b < 7; ++b) {
+	//	int index = rand() % 20;
+	//	for (int a = 0; a < 20; ++a) {
+	//		map[a][index] = false;
+	//		map[a][index] = false;
+	//		map[index][a] = false;
+	//		map[index][a] = false;
+	//	}
+//}
+
+	for (int a = 0; a < 20; ++a) {
+		map[a][0] = false;
+		map[a][19] = false;
+		map[0][a] = false;
+		map[19][a] = false;
 	}
+
+//for (int a = 0; a < 22; ++a) {
+//	wall->addBrick(indx2Grid(a, relativeCellWidth, -10), 11 * relativeCellHeight, relativeCellWidth, relativeCellHeight); // -------
+//	wall->addBrick(-11 * relativeCellWidth, indx2Grid(a, relativeCellHeight, -10), relativeCellWidth, relativeCellHeight);//|
+//	wall->addBrick(10 * relativeCellWidth, indx2Grid(a, relativeCellHeight, -10), relativeCellWidth, relativeCellHeight); //       |
+//	wall->addBrick(indx2Grid(a, relativeCellWidth, -10), -10 * relativeCellHeight, relativeCellWidth, relativeCellHeight);// _______ 
+//}
+
+for (int a = 0; a < 20; ++a) {
+	for (int b = 0; b < 20; ++b) {
+		if (!map[a][b]) {
+			wall->addBrick(indx2Grid(b, relativeCellWidth, -10), indx2Grid(19 - a, relativeCellHeight, -9), relativeCellWidth, relativeCellHeight);
+		}
+		else {
+			corridor->addBrick(indx2Grid(b, relativeCellWidth, -10), indx2Grid(19 - a, relativeCellHeight, -9), relativeCellWidth, relativeCellHeight);
+
+		}
+
+	}
+}
 
 }
 
 
 
- 

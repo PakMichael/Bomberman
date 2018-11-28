@@ -7,21 +7,24 @@
 #include "subordinate.h"
 #include <algorithm>
 #include <graph.h>
-#include "wall.h"
+#include "block.h"
 
 
-class Backstage : public Entity, public Subordinate {
+class Backstage : public Subordinate {
 	bool map[20][20];
-	std::vector<Wall*> walls;
+	Block* wall;
+	Block* corridor;
 	Graph* g;
+	float relativeCellWidth;
+	float relativeCellHeight;
 
 public:
 	Backstage(float relativeCellSizeX, float relativeCellSizeY);
-	void moveTo(int key) {}
-	void nudge() {}
-	bool collisionOccured(Figure* fig);
+	Block* getWall();
+	Block* getCorridor();
+
+
 private:
-	void constructCarcass();
 	void constructLabyrinth();
 	void constructWalls();
 };

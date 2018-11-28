@@ -20,6 +20,9 @@ protected:
 	float angle;
 	float EPSILON;
 	int indeciesCount;
+	char* texturePath;
+
+
 private:
 	Shader* shader;
 	GLuint VAO;
@@ -29,7 +32,6 @@ public:
 	void outline();
 	virtual void moveTo(int key) = 0;
 	virtual void nudge() = 0;
-	bool COLORED_FLAG = false;
 
 protected:
 	void Entity::assemble(std::vector<Primitive*> carcass, int points);
@@ -39,6 +41,7 @@ private:
 	void applyTransitions();
 	void constructIndecies(GLuint* indc, int size);
 	void setBuffers(GLfloat* vertecies, int vSize, GLuint* indecies, int iSize);
+	void loadTexture(char* path);
 };
 
 

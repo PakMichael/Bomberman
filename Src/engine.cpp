@@ -22,12 +22,7 @@ void Engine::start() {
 		glfwPollEvents();
 		screenHeight++;
 		screenWidth++;
-		//if (getFlagValue("size")) {
-		//	changeFlag("size", false);
-		//	screenWidth=screenHeight = 300;
-
-		//	glfwSetWindowSize(window,screenHeight, screenWidth);
-		//}
+ 
 		if (getFlagValue("nudgeBackstage")) {
 			changeFlag("nudgeBackstage", false);
 			backstage->nudge();
@@ -40,6 +35,7 @@ void Engine::start() {
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			draw(backstage);
+			draw(corridor);
 			draw(playersFigure);
 
 			glfwSwapBuffers(window);
@@ -126,6 +122,9 @@ void Engine::initializeRemarks() {
 	});
 	declareRemark("updBackstage", [this](void* ptr) {
 		this->updateBackstage((Entity*)ptr);
+	});
+	declareRemark("updCorridor", [this](void* ptr) {
+		corridor=(Entity*)ptr;
 	});
 	declareRemark("startEngine", [this](void* ptr) {
 		this->start();
