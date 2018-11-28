@@ -60,14 +60,14 @@ void Game::induceMovement() {
 		//figureFlying->setHitEarth();
 		break;
 	}
-	//if (!gameField->getWall()->intersects(figureFlying->getRectangle())) {
+	if (!gameField->getWall()->intersects(figureFlying->getRectangle())) {
 		figureFlying->fulfilProphecy();
 		setFlag("redrawAll", true);
-	//}
-	//else {
-	//	figureFlying->discardProphecy();
+	}
+	else {
+		figureFlying->discardProphecy();
 
-	//}
+	}
  
 
 }
@@ -83,10 +83,10 @@ void Game::initializeRemarks() {
 	//});
 	declareRemark("drop", [this](void* ptr)
 	{
-		changeFlag("drop", true);
+		setFlag("drop", true);
 	});
 	declareRemark("redraw", [this](void* ptr)
 	{
-		changeFlag("redraw", true);
+		setFlag("redrawAll", true);
 	});
 }

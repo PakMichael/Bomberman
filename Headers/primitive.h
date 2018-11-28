@@ -69,6 +69,8 @@ public:
 	Rectangle(float x, float y, float width, float height);
 	~Rectangle();
 	bool intersects(Rectangle* rect);
+	float getWidth();
+	float getHeight();
 private:
 	void build();
 };

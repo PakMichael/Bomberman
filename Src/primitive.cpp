@@ -100,6 +100,16 @@ Rectangle::~Rectangle() {
 	//std::cout << "rectangle rEkt" << std::endl;
 }
 
+float Rectangle::getWidth()
+{
+	return width;
+}
+
+float Rectangle::getHeight()
+{
+	return height;
+}
+
 void Rectangle::build() {
 	int index = 0;
 	for (int a = 0; a < 2; ++a) //ver

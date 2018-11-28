@@ -19,18 +19,27 @@ void Entity::initializeShader() {
 	shader = new Shader("Shaders/vertexShader.glsl", "Shaders/fragmentShader.glsl");
 }
 
+//void Entity::addTexture(std::string path)
+//{
+//	texturePaths.push_back(path);
+//	textures.push_back(new GLuint());
+//}
+// 
 
 void Entity::applyTransitions() {
 	//todo
 	glm::mat4 transform;
 
+	
 	transform = glm::translate(transform, glm::vec3(mX, mY, 0.5));
 
+ 
 
 
 	GLint transformLoc = glGetUniformLocation(shader->ID, "transform");
 
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
 
 
 	//transform = glm::rotate(transform, (float)glfwGetTime()*glm::radians(-55.0f), glm::vec3(0.0f, 0.0f, 0.5f));
@@ -40,11 +49,12 @@ void Entity::applyTransitions() {
 
 void Entity::outline() {
 	shader->use();
-
+	 
 	glBindVertexArray(VAO);
+ 
 	glBindTexture(GL_TEXTURE_2D, texture);
 	applyTransitions();
-	glDrawElements(GL_TRIANGLES, indeciesCount, GL_UNSIGNED_INT, 0);  
+	glDrawElements(GL_TRIANGLES, indeciesCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
@@ -63,16 +73,16 @@ void Entity::assemble(std::vector<Primitive*> carcass, int points) {
 		for (int a = 0; a < obj->getVertices() * 5; ++a)
 		{
 			vertices[index] = obj->getVertexAt(a);
-			++index; 
+			++index;
 
 		}
 
 
 	}
- 
+
 	GLuint* indecies = new GLuint[indeciesCount];
 	constructIndecies(indecies, indeciesCount);
- 
+
 	setBuffers(vertices, carcass.size()*points * 5, indecies, indeciesCount);
 
 	delete[] vertices;
@@ -114,7 +124,8 @@ void Entity::setBuffers(GLfloat* vertecies, int vSize, GLuint* indecies, int iSi
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	loadTexture(texturePath);
+ 
+		loadTexture(texturePath);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
@@ -123,6 +134,8 @@ void Entity::setBuffers(GLfloat* vertecies, int vSize, GLuint* indecies, int iSi
 void Entity::loadTexture(char * path)
 {
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	// set the texture wrapping/filtering options (on the currently bound texture object)
@@ -133,13 +146,13 @@ void Entity::loadTexture(char * path)
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	// load and generate the texture
 	int width, height, nrChannels;
-	unsigned char *data = stbi_load(path, &width, &height, &nrChannels, 0);
+	unsigned char *data = stbi_load(path, &width, &height, &nrChannels, STBI_rgb_alpha);
 	if (data)
 	{
 		std::cout << width << std::endl;
 		std::cout << height << std::endl;
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else

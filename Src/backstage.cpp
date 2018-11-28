@@ -8,7 +8,16 @@ Backstage::Backstage(float relativeCellSizeX, float relativeCellSizeY) {
 	relativeCellWidth = relativeCellSizeX;
 	relativeCellHeight = relativeCellSizeY;
 	wall = new Block();
+	wall->enhanceBrightness = true;
 	corridor = new Block("Textures/BackgroundTile.png");
+ 
+	//wall->addBrick(0, -0.5, relativeCellWidth, relativeCellHeight);
+	//wall->addBrick(indx2Grid(2, relativeCellWidth), -0.5, relativeCellWidth, relativeCellHeight);
+	//wall->addBrick(indx2Grid(4, relativeCellWidth), -0.5, relativeCellWidth, relativeCellHeight);
+	//wall->addBrick(indx2Grid(6, relativeCellWidth), -0.5, relativeCellWidth, relativeCellHeight);
+
+ //
+
 	constructLabyrinth();
 	constructWalls();
 	wall->constructCarcass();
@@ -92,27 +101,32 @@ void Backstage::constructWalls()
 		map[a][19] = false;
 		map[0][a] = false;
 		map[19][a] = false;
+		//map[8][a] = true;
+		//map[9][a] = true;
+		//map[10][a] = true;
+		//map[11][a] = true;
 	}
+ 
 
-//for (int a = 0; a < 22; ++a) {
-//	wall->addBrick(indx2Grid(a, relativeCellWidth, -10), 11 * relativeCellHeight, relativeCellWidth, relativeCellHeight); // -------
-//	wall->addBrick(-11 * relativeCellWidth, indx2Grid(a, relativeCellHeight, -10), relativeCellWidth, relativeCellHeight);//|
-//	wall->addBrick(10 * relativeCellWidth, indx2Grid(a, relativeCellHeight, -10), relativeCellWidth, relativeCellHeight); //       |
-//	wall->addBrick(indx2Grid(a, relativeCellWidth, -10), -10 * relativeCellHeight, relativeCellWidth, relativeCellHeight);// _______ 
-//}
+	//for (int a = 0; a < 22; ++a) {
+	//	wall->addBrick(indx2Grid(a, relativeCellWidth, -10), 11 * relativeCellHeight, relativeCellWidth, relativeCellHeight); // -------
+	//	wall->addBrick(-11 * relativeCellWidth, indx2Grid(a, relativeCellHeight, -10), relativeCellWidth, relativeCellHeight);//|
+	//	wall->addBrick(10 * relativeCellWidth, indx2Grid(a, relativeCellHeight, -10), relativeCellWidth, relativeCellHeight); //       |
+	//	wall->addBrick(indx2Grid(a, relativeCellWidth, -10), -10 * relativeCellHeight, relativeCellWidth, relativeCellHeight);// _______ 
+	//}
 
-for (int a = 0; a < 20; ++a) {
-	for (int b = 0; b < 20; ++b) {
-		if (!map[a][b]) {
-			wall->addBrick(indx2Grid(b, relativeCellWidth, -10), indx2Grid(19 - a, relativeCellHeight, -9), relativeCellWidth, relativeCellHeight);
+	for (int a = 0; a < 20; ++a) {
+		for (int b = 0; b < 20; ++b) {
+			if (!map[a][b]) {
+				wall->addBrick(indx2Grid(b, relativeCellWidth, -10), indx2Grid(19 - a, relativeCellHeight, -9), relativeCellWidth, relativeCellHeight);
+			}
+			else {
+				corridor->addBrick(indx2Grid(b, relativeCellWidth, -10), indx2Grid(19 - a, relativeCellHeight, -9), relativeCellWidth, relativeCellHeight);
+
+			}
+
 		}
-		else {
-			corridor->addBrick(indx2Grid(b, relativeCellWidth, -10), indx2Grid(19 - a, relativeCellHeight, -9), relativeCellWidth, relativeCellHeight);
-
-		}
-
 	}
-}
 
 }
 

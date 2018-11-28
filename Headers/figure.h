@@ -11,8 +11,7 @@
 #include <thread>
 #include <ctime>
 #include <cmath>
-
-extern bool blueprints[7][8];
+ 
 
 
 class Figure : public Subordinate, public Entity {
@@ -21,9 +20,9 @@ class Figure : public Subordinate, public Entity {
 	float relativeHeight;
 	int blueprintIndex;
 	int directionKey;
-	float speed;
+	float speedCoefficient=1;
 
-	bool collidedGround;
+	bool isRunning=false;
 
 	float tempX, tempY;
 
@@ -31,7 +30,7 @@ class Figure : public Subordinate, public Entity {
 
 
 public:
-	std::thread t;
+	std::thread* t=nullptr;
 
 public:
 	Figure(float initialX, float initialY, float height, float width);
@@ -56,11 +55,12 @@ public:
 	void discardProphecy();
 
 	bool intersects(Rectangle* rec);
-	Point2D* getDimensionsOfTile(int index, float angle);
+ 
 	Rectangle* getRectangle();
 	float getAngle();
 
 private:
+	void moveSmoothly();
 	void moveTo(int key);
 	void constructCarcass();
 

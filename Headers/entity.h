@@ -11,7 +11,7 @@
 #include <vector>
 #include <stb_image.h>
 
-class Entity{
+class Entity {
 
 protected:
 
@@ -28,6 +28,7 @@ private:
 	GLuint VAO;
 	GLuint texture;
 public:
+	bool enhanceBrightness=false;
 	Entity();
 	void outline();
 	virtual void moveTo(int key) = 0;

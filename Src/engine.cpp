@@ -22,7 +22,7 @@ void Engine::start() {
 		glfwPollEvents();
 		screenHeight++;
 		screenWidth++;
- 
+
 		if (getFlagValue("nudgeBackstage")) {
 			changeFlag("nudgeBackstage", false);
 			backstage->nudge();
@@ -65,9 +65,11 @@ void Engine::updateBackstage(Entity* objPtr) {
 void Engine::key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 
 
-		if (action == GLFW_PRESS)
-			playersFigure->moveTo(key);
-	
+	if (action == GLFW_PRESS)
+		playersFigure->moveTo(key);
+	if (action == GLFW_REPEAT)
+		playersFigure->moveTo(key);
+
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -102,11 +104,12 @@ void Engine::eventsInitialize() {
 	auto lam = [](GLFWwindow* window, int key, int scancode, int action, int mode) {
 		static_cast<Engine*>(glfwGetWindowUserPointer(window))->key_callback(window, key, scancode, action, mode);
 	};
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 	glfwSetKeyCallback(window, lam);
 }
 
 void Engine::windowInitialize(int* h, int* w) {
-	window = glfwCreateWindow(*w, *h, "Tetris", nullptr, nullptr);
+	window = glfwCreateWindow(*w, *h, "Bomberman", nullptr, nullptr);
 	if (!window)
 	{
 		glfwTerminate();
@@ -124,7 +127,7 @@ void Engine::initializeRemarks() {
 		this->updateBackstage((Entity*)ptr);
 	});
 	declareRemark("updCorridor", [this](void* ptr) {
-		corridor=(Entity*)ptr;
+		corridor = (Entity*)ptr;
 	});
 	declareRemark("startEngine", [this](void* ptr) {
 		this->start();

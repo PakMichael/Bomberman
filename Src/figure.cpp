@@ -1,23 +1,23 @@
 #include "figure.h"
 
-bool blueprints[7][8] = {   /* sorry for this :C */
-		{ 1, 0, 0, 0, 0, 0, 0, 0 }
-
-};
 
 
 
 Figure::Figure(float initialX, float initialY, float height, float width) {
-	texturePath = "Textures/Bman_F_f00.PNG";
-	//texturePath = "C:/Users/Michael/Documents/GitHub/Bomberman/container.jpg";
+
+	// addTexture("Textures/Bman_F_f00.png");
+	//texturePath="Textures/Bman_F_f00.png";
+	texturePath = "Textures/SolidBlock.png";
 	this->relativeHeight = height;
 	this->relativeWidth = width;
 
 	tempX = initialX;
 	tempY = initialY;
-	collidedGround = false;
+	//	collidedGround = false;
 	blueprintIndex = 0;
-	fulfilProphecy();
+	mX = tempX;
+	mY = tempY;
+	outline();
 	constructCarcass();
 
 }
@@ -39,29 +39,30 @@ void Figure::nudge() {
 
 
 void Figure::moveTo(int key) {
-	if (key == 'E') { collidedGround = true; makeRemark("immovable", 0); } //always called from main thread
+	if (isRunning)return;
+	//if (key == 'E') { collidedGround = true; makeRemark("immovable", 0); } //always called from main thread
 	directionKey = key;
 	makeRemark("moveTo", 0);
 }
 
 void Figure::moveRight() {
-	tempX += relativeWidth;
+	tempX += relativeWidth * speedCoefficient;
 }
 
 void Figure::moveLeft() {
-	tempX -= relativeWidth;
+	tempX -= relativeWidth * speedCoefficient;
 }
 
 void Figure::moveDown() {
-	tempY -= relativeHeight;
+	tempY -= relativeHeight * speedCoefficient;
 }
 
 void Figure::moveUp() {
-	tempY += relativeHeight;
+	tempY += relativeHeight * speedCoefficient;
 }
 
 void Figure::boostDown() {
-	speed = 0;
+	speedCoefficient = 0;
 }
 
 void Figure::rotate() {
@@ -94,24 +95,13 @@ float Figure::getY() {
 void Figure::constructCarcass() {
 
 	std::vector<Primitive*> carcass;
-	carcass.push_back(new Rectangle(0, 0, relativeWidth, relativeHeight));
+	carcass.push_back(new Rectangle(0, 0, relativeWidth, relativeHeight ));
 
 	assemble(carcass, 4);
 
 }
 
-Point2D* Figure::getDimensionsOfTile(int index, float angle) {
-	if (!blueprints[blueprintIndex][index])return 0;
-	float tmpX = index * relativeWidth - relativeWidth * 4 * (index / 4);
-	float tmpY = -(index / 4)*relativeHeight;
-	if (!Arithmetics::floatEquals(angle, 0))
-	{
-		float temp = tmpX - relativeHeight;
-		tmpX = -tmpY;
-		tmpY = temp;
-	}
-	return new Point2D(tmpX + mX, tmpY + mY);
-}
+
 Rectangle * Figure::getRectangle()
 {
 	return new Rectangle(tempX, tempY, relativeWidth, relativeHeight);
@@ -122,12 +112,34 @@ bool Figure::intersects(Rectangle* rec) {
 
 
 
+void Figure::moveSmoothly()
+{
+	isRunning = true;
+	typedef std::chrono::high_resolution_clock clock_;
+
+	for (int a = 0; a < 5; ++a) {
+		mX += (tempX - mX) / 5.0f;
+		mY += (tempY - mY) / 5.0f;
+		std::cout << a << ", ";
+		setFlag("redraw", true);
+		std::chrono::time_point<clock_> pause = clock_::now();
+		while (clock_::now() - pause < std::chrono::duration<double>(1)) {};
+
+	}
+
+	mX = tempX;
+	mY = tempY;
+	isRunning = false;
+}
+
 void Figure::fulfilProphecy() {
 	mX = tempX;
 	mY = tempY;
-
 	outline();
 }
+
+
+
 
 void Figure::discardProphecy() {
 	tempX = mX;

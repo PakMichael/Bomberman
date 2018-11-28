@@ -16,8 +16,8 @@ class Game : public Supervisor, public Subordinate {
 	std::thread t;
 
 private:
-	int windowHeight = 500;
-	int windowWidth = 500;
+	int windowHeight = 650;
+	int windowWidth = 650;
 	float relativeCellSizeX = 0.1f;
 	float relativeCellSizeY = 0.1f;
 public:
