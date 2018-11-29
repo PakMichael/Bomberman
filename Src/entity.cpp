@@ -29,33 +29,43 @@ void Entity::initializeShader() {
 void Entity::applyTransitions() {
 	//todo
 	glm::mat4 transform;
+	glm::mat4 view;
+	glm::mat4 projection;
 
-	
 	transform = glm::translate(transform, glm::vec3(mX, mY, 0.5));
+	view = glm::translate(view, glm::vec3(qX, qY, -3.0f));
+	projection = glm::perspective(0.5f, 650.0f/ 650.0f, 0.1f, 100.0f); // 0.76f = no zoom 
 
- 
 
 
 	GLint transformLoc = glGetUniformLocation(shader->ID, "transform");
-
+	GLint  viewLoc = glGetUniformLocation(shader->ID, "view");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-
 
 
 	//transform = glm::rotate(transform, (float)glfwGetTime()*glm::radians(-55.0f), glm::vec3(0.0f, 0.0f, 0.5f));
 	transformLoc = glGetUniformLocation(shader->ID, "transform");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	shader->setMat4("projection", projection);
+
 }
 
 void Entity::outline() {
 	shader->use();
-	 
+
 	glBindVertexArray(VAO);
- 
-	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glBindTexture(GL_TEXTURE_2D, *allTextures[textureIndexOffset+ indexTexture]);
 	applyTransitions();
 	glDrawElements(GL_TRIANGLES, indeciesCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+}
+
+void Entity::addToTextures(std::string* str)
+{
+	allTexturePaths.push_back(*str);
+	allTextures.push_back(new GLuint(0));
 }
 
 
@@ -124,20 +134,20 @@ void Entity::setBuffers(GLfloat* vertecies, int vSize, GLuint* indecies, int iSi
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
- 
-		loadTexture(texturePath);
+	for (int a = 0; a < allTexturePaths.size(); ++a)
+		loadTexture(a);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
 }
 
-void Entity::loadTexture(char * path)
+void Entity::loadTexture(int index)
 {
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glGenTextures(1, allTextures[index]);
+	glBindTexture(GL_TEXTURE_2D, *allTextures[index]);
 	// set the texture wrapping/filtering options (on the currently bound texture object)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -146,7 +156,7 @@ void Entity::loadTexture(char * path)
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	// load and generate the texture
 	int width, height, nrChannels;
-	unsigned char *data = stbi_load(path, &width, &height, &nrChannels, STBI_rgb_alpha);
+	unsigned char *data = stbi_load(allTexturePaths[index].c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
 	if (data)
 	{
 		std::cout << width << std::endl;

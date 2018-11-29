@@ -27,8 +27,8 @@ void Engine::start() {
 			changeFlag("nudgeBackstage", false);
 			backstage->nudge();
 		}
-		//if (getFlagValue("redrawAll"))
-		//{
+		if (getFlagValue("redrawAll"))
+		{
 
 			changeFlag("redrawAll", false);
 			glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
@@ -42,7 +42,7 @@ void Engine::start() {
 			draw(playersFigure);
 
 			glfwSwapBuffers(window);
-		//}
+		}
 	}
 	glfwDestroyWindow(window);
 
@@ -139,6 +139,11 @@ void Engine::initializeRemarks() {
 		screenHeight = ((Point2D*)ptr)->getY();
 		screenWidth = ((Point2D*)ptr)->getX();
 		initializeGL();
+	});
+
+	declareRemark("displaceMap", [this](void* ptr) {
+		((Entity*)corridor)->nudge();
+		((Entity*)backstage)->nudge();
 	});
 }
 void Engine::initializeFlags() {

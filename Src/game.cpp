@@ -89,4 +89,12 @@ void Game::initializeRemarks() {
 	{
 		setFlag("redrawAll", true);
 	});
+
+	declareRemark("stepped", [this](void* ptr)
+	{
+		Point2D* pos=(Point2D*)ptr;
+		gameField->displaceMap(pos);
+		makeRemark("displaceMap",0);
+		setFlag("redrawAll", true);
+	});
 }

@@ -5,12 +5,13 @@ float indx2Grid(int index, float cellSize, int offsetIndex = 0) {
 }
 
 Backstage::Backstage(float relativeCellSizeX, float relativeCellSizeY) {
+	mapDisplacements = new Point2D(0,0);
 	relativeCellWidth = relativeCellSizeX;
 	relativeCellHeight = relativeCellSizeY;
-	wall = new Block();
+	wall = new Block(mapDisplacements);
 	wall->enhanceBrightness = true;
-	corridor = new Block("Textures/BackgroundTile.png");
- 
+	corridor = new Block(mapDisplacements, "Textures/BackgroundTile.png");
+
 	//wall->addBrick(0, -0.5, relativeCellWidth, relativeCellHeight);
 	//wall->addBrick(indx2Grid(2, relativeCellWidth), -0.5, relativeCellWidth, relativeCellHeight);
 	//wall->addBrick(indx2Grid(4, relativeCellWidth), -0.5, relativeCellWidth, relativeCellHeight);
@@ -36,6 +37,11 @@ Block * Backstage::getWall()
 Block * Backstage::getCorridor()
 {
 	return corridor;
+}
+
+void Backstage::displaceMap(Point2D * pos)
+{
+	*mapDisplacements = *pos;
 }
 
 
@@ -106,7 +112,7 @@ void Backstage::constructWalls()
 		//map[10][a] = true;
 		//map[11][a] = true;
 	}
- 
+
 
 	//for (int a = 0; a < 22; ++a) {
 	//	wall->addBrick(indx2Grid(a, relativeCellWidth, -10), 11 * relativeCellHeight, relativeCellWidth, relativeCellHeight); // -------

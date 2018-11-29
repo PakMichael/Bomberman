@@ -12,9 +12,12 @@
 
 class Game : public Supervisor, public Subordinate {
 	Figure* figureFlying;
-	Backstage* gameField;
+	
 	std::thread t;
 
+
+public:
+	Backstage* gameField;
 private:
 	int windowHeight = 650;
 	int windowWidth = 650;

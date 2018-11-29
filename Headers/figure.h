@@ -62,6 +62,7 @@ public:
 
 private:
 	void moveSmoothly();
+	void smoothTextureTransitions();
 	void moveTo(int key);
 	void constructCarcass();
 

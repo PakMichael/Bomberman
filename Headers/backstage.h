@@ -17,12 +17,14 @@ class Backstage : public Subordinate {
 	Graph* g;
 	float relativeCellWidth;
 	float relativeCellHeight;
+	Point2D* mapDisplacements;
+
 
 public:
 	Backstage(float relativeCellSizeX, float relativeCellSizeY);
 	Block* getWall();
 	Block* getCorridor();
-
+	void displaceMap(Point2D* pos);
 
 private:
 	void constructLabyrinth();
