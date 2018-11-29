@@ -17,6 +17,7 @@ set(SOURCES
 	Src/graph.cpp
 	Src/block.cpp
 	Src/stb_image.cpp
+	Src/dynamic_block.cpp
 	)
 	
 set(HEADERS
@@ -33,6 +34,7 @@ set(HEADERS
 	Headers/graph.h
 	Headers/block.h
 	Headers/stb_image.h
+	Headers/dynamic_block.h
 	)
 
 

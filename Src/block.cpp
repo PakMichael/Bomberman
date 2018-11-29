@@ -8,7 +8,7 @@ void Block::constructCarcass()
 	assemble(bricks, 4);
 }
 
- 
+
 
 void Block::nudge()
 {
@@ -17,7 +17,7 @@ void Block::nudge()
 
 }
 
-Block::Block(Point2D* displacements,char* texPath)
+Block::Block(Point2D* displacements, char* texPath)
 {
 	this->displacements = displacements;
 	mX = mY = 0;
@@ -63,4 +63,9 @@ bool Block::intersects(Rectangle* rec) {
 void Block::addBrick(float posX, float posY, float width, float height)
 {
 	bricks.push_back(new Rectangle(posX, posY, width, height));
+}
+
+Block::~Block()
+{
+	for (Primitive* ptr : bricks) { delete ptr; }
 }

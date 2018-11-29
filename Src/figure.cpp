@@ -65,6 +65,12 @@ void Figure::moveTo(int key) {
 	makeRemark("moveTo", 0);
 }
 
+
+void Figure::placeBomb(){
+	makeRemark("bombPlantedAt",new Point2D(mX,mY));
+
+}
+
 void Figure::moveRight() {
 	tempX += relativeWidth * speedCoefficient;
 	textureIndexOffset = 24;
@@ -100,6 +106,7 @@ void Figure::rotate() {
 	}
 
 }
+
 
 void Figure::moveNTimesBy(int x, int y) {
 	tempX += relativeHeight * x;

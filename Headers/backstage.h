@@ -8,12 +8,14 @@
 #include <algorithm>
 #include <graph.h>
 #include "block.h"
+#include "dynamic_block.h"
 
 
 class Backstage : public Subordinate {
 	bool map[20][20];
 	Block* wall;
 	Block* corridor;
+	DynamicBlock* bombs;
 	Graph* g;
 	float relativeCellWidth;
 	float relativeCellHeight;
@@ -24,6 +26,7 @@ public:
 	Backstage(float relativeCellSizeX, float relativeCellSizeY);
 	Block* getWall();
 	Block* getCorridor();
+	DynamicBlock* getBombs();
 	void displaceMap(Point2D* pos);
 
 private:

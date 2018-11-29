@@ -17,12 +17,13 @@ class Game : public Supervisor, public Subordinate {
 
 
 public:
+	float relativeCellSizeX = 0.1f;
+	float relativeCellSizeY = 0.1f;
 	Backstage* gameField;
 private:
 	int windowHeight = 650;
 	int windowWidth = 650;
-	float relativeCellSizeX = 0.1f;
-	float relativeCellSizeY = 0.1f;
+
 public:
 	void init();
 	void createFigure();

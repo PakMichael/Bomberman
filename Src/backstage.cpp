@@ -11,7 +11,9 @@ Backstage::Backstage(float relativeCellSizeX, float relativeCellSizeY) {
 	wall = new Block(mapDisplacements);
 	wall->enhanceBrightness = true;
 	corridor = new Block(mapDisplacements, "Textures/BackgroundTile.png");
-
+	bombs = new DynamicBlock(mapDisplacements, "Textures/Bomb/Bomb_f01.png");
+	bombs->addToTextures(new std::string("Textures/Bomb/Bomb_f02.png"));
+	bombs->addToTextures(new std::string("Textures/Bomb/Bomb_f03.png"));
 	//wall->addBrick(0, -0.5, relativeCellWidth, relativeCellHeight);
 	//wall->addBrick(indx2Grid(2, relativeCellWidth), -0.5, relativeCellWidth, relativeCellHeight);
 	//wall->addBrick(indx2Grid(4, relativeCellWidth), -0.5, relativeCellWidth, relativeCellHeight);
@@ -23,7 +25,7 @@ Backstage::Backstage(float relativeCellSizeX, float relativeCellSizeY) {
 	constructWalls();
 	wall->constructCarcass();
 	corridor->constructCarcass();
-
+	bombs->constructCarcass();
 
 }
 
@@ -37,6 +39,11 @@ Block * Backstage::getWall()
 Block * Backstage::getCorridor()
 {
 	return corridor;
+}
+
+DynamicBlock * Backstage::getBombs()
+{
+	return bombs;
 }
 
 void Backstage::displaceMap(Point2D * pos)
@@ -78,12 +85,12 @@ void Backstage::constructLabyrinth()
 		map[indx / 20][indx - (indx / 20) * 20] = true;
 	}
 
-	for (int a = 0; a < 20; ++a) {
-		for (int b = 0; b < 20; ++b) {
-			std::cout << map[a][b] << ", ";
-		}
-		std::cout << "\n";
-	}
+	//for (int a = 0; a < 20; ++a) {
+	//	for (int b = 0; b < 20; ++b) {
+	//		std::cout << map[a][b] << ", ";
+	//	}
+	//	std::cout << "\n";
+	//}
 
 
 

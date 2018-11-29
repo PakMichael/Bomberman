@@ -11,7 +11,7 @@ void Game::init() {
 	gameField = new Backstage(relativeCellSizeX, relativeCellSizeY);
 	makeRemark("updBackstage", gameField->getWall());
 	makeRemark("updCorridor", gameField->getCorridor());
-
+	makeRemark("updBombs",gameField->getBombs());
 
 	createFigure();
 
@@ -38,9 +38,6 @@ void Game::induceMovement() {
 
 	switch (figureFlying->getDirection())
 	{
-	case ' ':
-		figureFlying->rotate();
-		break;
 	case 'Q':
 		figureFlying->boostDown();
 		break;
@@ -56,8 +53,8 @@ void Game::induceMovement() {
 	case 'W':
 		figureFlying->moveUp();
 		break;
-	case 'E':
-		//figureFlying->setHitEarth();
+	case ' ':
+		figureFlying->placeBomb();
 		break;
 	}
 	if (!gameField->getWall()->intersects(figureFlying->getRectangle())) {
@@ -89,6 +86,13 @@ void Game::initializeRemarks() {
 	{
 		setFlag("redrawAll", true);
 	});
+
+	declareRemark("bombPlantedAt", [this](void* ptr)
+	{
+		gameField->getBombs()->placeBombAt((Point2D*)ptr,new Point2D(relativeCellSizeX, relativeCellSizeY));
+		setFlag("redrawAll", true);
+	});
+
 
 	declareRemark("stepped", [this](void* ptr)
 	{

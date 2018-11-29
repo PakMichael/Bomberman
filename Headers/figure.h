@@ -44,6 +44,7 @@ public:
 	void moveDown();
 	void moveUp();
 	void rotate();
+	void placeBomb();
 	void nudge();
 	int getDirection();
 	float getX();

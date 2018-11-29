@@ -14,6 +14,7 @@ class Engine : public Supervisor{
 	Entity* backstage;
 	Entity* playersFigure;
 	Entity* corridor;
+	Entity* bombs;
 	GLFWwindow* window;
 	int screenHeight, screenWidth;
 

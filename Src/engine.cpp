@@ -34,12 +34,14 @@ void Engine::start() {
 			glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			if(backstage!=NULL)
-			draw(backstage);
+			if (backstage != NULL)
+				draw(backstage);
 			if (corridor != NULL)
-			draw(corridor);
+				draw(corridor);
 			if (playersFigure != NULL)
-			draw(playersFigure);
+				draw(playersFigure);
+			if (bombs != NULL)
+				draw(bombs);
 
 			glfwSwapBuffers(window);
 		}
@@ -132,6 +134,9 @@ void Engine::initializeRemarks() {
 	declareRemark("updCorridor", [this](void* ptr) {
 		corridor = (Entity*)ptr;
 	});
+	declareRemark("updBombs", [this](void* ptr) {
+		bombs = (Entity*)ptr;
+	});
 	declareRemark("startEngine", [this](void* ptr) {
 		this->start();
 	});
@@ -144,6 +149,7 @@ void Engine::initializeRemarks() {
 	declareRemark("displaceMap", [this](void* ptr) {
 		((Entity*)corridor)->nudge();
 		((Entity*)backstage)->nudge();
+		((Entity*)bombs)->nudge();
 	});
 }
 void Engine::initializeFlags() {
