@@ -27,19 +27,22 @@ void Engine::start() {
 			changeFlag("nudgeBackstage", false);
 			backstage->nudge();
 		}
-		if (getFlagValue("redrawAll"))
-		{
+		//if (getFlagValue("redrawAll"))
+		//{
 
 			changeFlag("redrawAll", false);
 			glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			if(backstage!=NULL)
 			draw(backstage);
+			if (corridor != NULL)
 			draw(corridor);
+			if (playersFigure != NULL)
 			draw(playersFigure);
 
 			glfwSwapBuffers(window);
-		}
+		//}
 	}
 	glfwDestroyWindow(window);
 

@@ -25,6 +25,7 @@ class Figure : public Subordinate, public Entity {
 	bool isRunning=false;
 
 	float tempX, tempY;
+	float vecX=0, vecY=0;
 
 	std::shared_ptr<Rectangle> tiles[8];
 

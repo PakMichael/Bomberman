@@ -7,7 +7,7 @@ Figure::Figure(float initialX, float initialY, float height, float width) {
 
 	// addTexture("Textures/Bman_F_f00.png");
 	//texturePath="Textures/Bman_F_f00.png";
-	texturePath = "Textures/SolidBlock.png";
+	texturePath = "Textures/Bman_F_f00.png";
 	this->relativeHeight = height;
 	this->relativeWidth = width;
 
@@ -95,7 +95,7 @@ float Figure::getY() {
 void Figure::constructCarcass() {
 
 	std::vector<Primitive*> carcass;
-	carcass.push_back(new Rectangle(0, 0, relativeWidth, relativeHeight ));
+	carcass.push_back(new Rectangle(0, relativeHeight, relativeWidth, relativeHeight * 2));
 
 	assemble(carcass, 4);
 
@@ -117,24 +117,31 @@ void Figure::moveSmoothly()
 	isRunning = true;
 	typedef std::chrono::high_resolution_clock clock_;
 
-	for (int a = 0; a < 5; ++a) {
-		mX += (tempX - mX) / 5.0f;
-		mY += (tempY - mY) / 5.0f;
+
+	int steps = 3;
+	for (int a = 0; a < steps; ++a) {
+		if (tempX != vecX)
+			mX += (tempX-vecX) / ((float)steps);
+		if (tempY != vecY)
+			mY += (tempY-vecY) / ((float)steps);
 		std::cout << a << ", ";
 		setFlag("redraw", true);
 		std::chrono::time_point<clock_> pause = clock_::now();
-		while (clock_::now() - pause < std::chrono::duration<double>(1)) {};
+		while (clock_::now() - pause < std::chrono::duration<double>(0.05)) {};
 
 	}
 
-	mX = tempX;
-	mY = tempY;
+	vecX = tempX;
+	vecY = tempY;
+
 	isRunning = false;
 }
 
 void Figure::fulfilProphecy() {
-	mX = tempX;
-	mY = tempY;
+	if (!isRunning)
+		t = new std::thread(&Figure::moveSmoothly, this);
+	//mX = tempX;
+	//mY = tempY;
 	outline();
 }
 
