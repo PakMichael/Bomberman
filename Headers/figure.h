@@ -23,6 +23,7 @@ class Figure : public Subordinate, public Entity {
 	float speedCoefficient=1;
 
 	bool isRunning=false;
+	bool forceRun = true;
 
 	float tempX, tempY;
 	float vecX=0, vecY=0;

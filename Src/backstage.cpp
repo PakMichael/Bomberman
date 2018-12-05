@@ -5,6 +5,7 @@ float indx2Grid(int index, float cellSize, int offsetIndex = 0) {
 }
 
 Backstage::Backstage(float relativeCellSizeX, float relativeCellSizeY) {
+	createRemarks();
 	mapDisplacements = new Point2D(0,0);
 	relativeCellWidth = relativeCellSizeX;
 	relativeCellHeight = relativeCellSizeY;
@@ -14,6 +15,7 @@ Backstage::Backstage(float relativeCellSizeX, float relativeCellSizeY) {
 	bombs = new DynamicBlock(mapDisplacements, "Textures/Bomb/Bomb_f01.png");
 	bombs->addToTextures(new std::string("Textures/Bomb/Bomb_f02.png"));
 	bombs->addToTextures(new std::string("Textures/Bomb/Bomb_f03.png"));
+	bombs->addSupervisor(this);
 	//wall->addBrick(0, -0.5, relativeCellWidth, relativeCellHeight);
 	//wall->addBrick(indx2Grid(2, relativeCellWidth), -0.5, relativeCellWidth, relativeCellHeight);
 	//wall->addBrick(indx2Grid(4, relativeCellWidth), -0.5, relativeCellWidth, relativeCellHeight);
@@ -141,6 +143,15 @@ void Backstage::constructWalls()
 		}
 	}
 
+}
+
+void Backstage::createRemarks()
+{
+ 
+	declareRemark("bombRedraw", [this](void* ptr)
+	{
+		makeRemark("redraw", 0);
+	});
 }
 
 

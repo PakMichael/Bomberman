@@ -65,6 +65,15 @@ void Block::addBrick(float posX, float posY, float width, float height)
 	bricks.push_back(new Rectangle(posX, posY, width, height));
 }
 
+void Block::addBrick(Rectangle* rec)
+{
+	bricks.push_back(rec);
+}
+void Block::removeBrick(Rectangle * rec)
+{
+	bricks.erase(find(bricks.begin(), bricks.end(), rec));
+
+}
 Block::~Block()
 {
 	for (Primitive* ptr : bricks) { delete ptr; }

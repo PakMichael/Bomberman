@@ -9,6 +9,7 @@ void Game::init() {
 	srand(std::time(0));
 
 	gameField = new Backstage(relativeCellSizeX, relativeCellSizeY);
+	gameField->addSupervisor(this);
 	makeRemark("updBackstage", gameField->getWall());
 	makeRemark("updCorridor", gameField->getCorridor());
 	makeRemark("updBombs",gameField->getBombs());
@@ -93,7 +94,11 @@ void Game::initializeRemarks() {
 		setFlag("redrawAll", true);
 	});
 
-
+	declareRemark("nudgeBombs", [this](void* ptr)
+	{
+//		makeRemark("nudgeBomb", 0);
+		setFlag("redrawAll", true);
+	});
 	declareRemark("stepped", [this](void* ptr)
 	{
 		Point2D* pos=(Point2D*)ptr;

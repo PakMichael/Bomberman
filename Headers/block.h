@@ -19,6 +19,8 @@ public:
 	Block(Point2D* displacements, char* texPath = "Textures/SolidBlock.png");
 	bool intersects(Rectangle* rec);
 	void  addBrick(float x, float y, float width, float height);
+	void  addBrick(Rectangle* rec);
+	void removeBrick(Rectangle* rec);
 	void constructCarcass();
 protected:
 	~Block();

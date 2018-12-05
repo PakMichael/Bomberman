@@ -12,7 +12,7 @@ std::string* putTogetherPath(char* a, int index, char* b) {
 Figure::Figure(float initialX, float initialY, float height, float width) {
 
 	for (int a = 0; a < 8; ++a) {
-		addToTextures(putTogetherPath("Textures/BMan/Front/Bman_F_f0",a, ".png"));
+		addToTextures(putTogetherPath("Textures/BMan/Front/Bman_F_f0", a, ".png"));
 	}
 	for (int a = 0; a < 8; ++a) {
 		addToTextures(putTogetherPath("Textures/BMan/LSide/Bman_F_f0", a, ".png"));
@@ -59,15 +59,17 @@ void Figure::nudge() {
 
 
 void Figure::moveTo(int key) {
+	if (key == directionKey)forceRun = true;
+	else forceRun = false;
 	if (isRunning)return;
-	//if (key == 'E') { collidedGround = true; makeRemark("immovable", 0); } //always called from main thread
+
 	directionKey = key;
 	makeRemark("moveTo", 0);
 }
 
 
-void Figure::placeBomb(){
-	makeRemark("bombPlantedAt",new Point2D(mX,mY));
+void Figure::placeBomb() {
+	makeRemark("bombPlantedAt", new Point2D(mX, mY));
 
 }
 
@@ -150,7 +152,8 @@ void Figure::moveSmoothly()
 
 	std::chrono::time_point<clock_> texPause = clock_::now();
 
-	int steps = 12;
+	int steps = 13;
+	//while (forceRun) {
 	for (int a = 0; a < steps; ++a) {
 		if (tempX != vecX) {
 			mX += (tempX - vecX) / ((float)steps);
@@ -162,9 +165,7 @@ void Figure::moveSmoothly()
 			qY -= (tempY - vecY) / ((float)steps);
 			makeRemark("stepped", new Point2D(0, (-tempY + vecY) / ((float)steps)));
 		}
-		std::cout << a << ", ";
-		//makeRemark("stepped", new Point2D(vecX-tempX, vecY- tempY));
-		if (clock_::now() - texPause > std::chrono::duration<double>(0.05f)) {
+		if (clock_::now() - texPause > std::chrono::duration<double>(0.025f)) {
 			++indexTexture;
 			if (indexTexture >= 8)indexTexture = 0;
 			texPause = clock_::now();
@@ -172,10 +173,11 @@ void Figure::moveSmoothly()
 
 
 		std::chrono::time_point<clock_> pause = clock_::now();
-		while (clock_::now() - pause < std::chrono::duration<double>(0.15f / steps)) {};
+		while (clock_::now() - pause < std::chrono::duration<double>(0.30f / steps)) {}; //0.15
 
 	}
 
+	//}
 	vecX = tempX;
 	vecY = tempY;
 

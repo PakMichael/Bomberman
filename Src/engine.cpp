@@ -27,6 +27,11 @@ void Engine::start() {
 			changeFlag("nudgeBackstage", false);
 			backstage->nudge();
 		}
+
+		if (getFlagValue("nudgeBomb")) {
+			((Entity*)bombs)->nudge();
+			changeFlag("nudgeBomb", false);
+		}
 		if (getFlagValue("redrawAll"))
 		{
 
@@ -69,11 +74,13 @@ void Engine::updateBackstage(Entity* objPtr) {
 
 void Engine::key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 
-
-	if (action == GLFW_PRESS)
+	//std::cout << key << std::endl;
+	if (action == GLFW_PRESS) {
 		playersFigure->moveTo(key);
-	if (action == GLFW_REPEAT)
+	}
+	if (action == GLFW_RELEASE) {
 		playersFigure->moveTo(key);
+	}
 
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
@@ -145,6 +152,9 @@ void Engine::initializeRemarks() {
 		screenWidth = ((Point2D*)ptr)->getX();
 		initializeGL();
 	});
+	declareRemark("nudgeBomb", [this](void* ptr) {
+		changeFlag("nudgeBomb", true);
+	});
 
 	declareRemark("displaceMap", [this](void* ptr) {
 		((Entity*)corridor)->nudge();
@@ -158,5 +168,6 @@ void Engine::initializeFlags() {
 	declareFlag("nudgeBackstage");
 	declareFlag("drop");
 	declareFlag("size");
+	declareFlag("nudgeBomb");
 }
 

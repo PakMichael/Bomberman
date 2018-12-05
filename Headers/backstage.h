@@ -11,7 +11,7 @@
 #include "dynamic_block.h"
 
 
-class Backstage : public Subordinate {
+class Backstage : public Subordinate, public Supervisor {
 	bool map[20][20];
 	Block* wall;
 	Block* corridor;
@@ -32,6 +32,7 @@ public:
 private:
 	void constructLabyrinth();
 	void constructWalls();
+	void createRemarks();
 };
 
 
