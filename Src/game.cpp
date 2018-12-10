@@ -36,31 +36,13 @@ void Game::createFigure() {
 
 
 void Game::induceMovement() {
-
-	switch (figureFlying->getDirection())
-	{
-	case 'Q':
-		figureFlying->boostDown();
-		break;
-	case 'A':
-		figureFlying->moveLeft();
-		break;
-	case 'D':
-		figureFlying->moveRight();
-		break;
-	case 'S':
-		figureFlying->moveDown();
-		break;
-	case 'W':
-		figureFlying->moveUp();
-		break;
-	case ' ':
-		figureFlying->placeBomb();
-		break;
-	}
+ 
 	if (!gameField->getWall()->intersects(figureFlying->getRectangle())) {
 		figureFlying->fulfilProphecy();
+		gameField->displaceMap(new Point2D(figureFlying->vecX,figureFlying->vecY));
+		makeRemark("displaceMap", 0);
 		setFlag("redrawAll", true);
+
 	}
 	else {
 		figureFlying->discardProphecy();
@@ -74,11 +56,6 @@ void Game::initializeRemarks() {
 	{
 		induceMovement();
 	});
-	//declareRemark("immovable", [this](void* ptr)
-	//{
-	//	gameField.reconstructBackstage();
-	//	createFigure();
-	//});
 	declareRemark("drop", [this](void* ptr)
 	{
 		setFlag("drop", true);
@@ -99,11 +76,5 @@ void Game::initializeRemarks() {
 //		makeRemark("nudgeBomb", 0);
 		setFlag("redrawAll", true);
 	});
-	declareRemark("stepped", [this](void* ptr)
-	{
-		Point2D* pos=(Point2D*)ptr;
-		gameField->displaceMap(pos);
-		makeRemark("displaceMap",0);
-		setFlag("redrawAll", true);
-	});
+	 
 }

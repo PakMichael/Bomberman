@@ -74,12 +74,14 @@ void Engine::updateBackstage(Entity* objPtr) {
 
 void Engine::key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 
-	//std::cout << key << std::endl;
+
 	if (action == GLFW_PRESS) {
 		playersFigure->moveTo(key);
+		std::cout << key << std::endl;
 	}
 	if (action == GLFW_RELEASE) {
-		playersFigure->moveTo(key);
+		playersFigure->moveTo(-key);
+		std::cout << -key << std::endl;
 	}
 
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)

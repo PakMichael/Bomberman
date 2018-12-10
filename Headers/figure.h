@@ -11,60 +11,52 @@
 #include <thread>
 #include <ctime>
 #include <cmath>
- 
+
 
 
 class Figure : public Subordinate, public Entity {
 
-	float relativeWidth;
-	float relativeHeight;
-	int blueprintIndex;
+	float relativeWidth, relativeHeight;
 	int directionKey;
-	float speedCoefficient=1;
 
-	bool isRunning=false;
-	bool forceRun = true;
+	bool isRunning = true;
 
 	float tempX, tempY;
-	float vecX=0, vecY=0;
 
-	std::shared_ptr<Rectangle> tiles[8];
+
 
 
 public:
-	std::thread* t=nullptr;
+	float vecX = 0, vecY = 0;
 
+	std::thread* mov = nullptr;
 public:
 	Figure(float initialX, float initialY, float height, float width);
 	~Figure();
 
-	void boostDown();
-	void moveNTimesBy(int x, int y);
+ 
 	void moveRight();
 	void moveLeft();
 	void moveDown();
 	void moveUp();
-	void rotate();
 	void placeBomb();
 	void nudge();
 	int getDirection();
 	float getX();
 	float getY();
-
-	void init();
+ 
 
 
 	void fulfilProphecy();
 	void discardProphecy();
 
 	bool intersects(Rectangle* rec);
- 
+
 	Rectangle* getRectangle();
-	float getAngle();
 
 private:
+	void assistMovement(float dispX, float dispY);
 	void moveSmoothly();
-	void smoothTextureTransitions();
 	void moveTo(int key);
 	void constructCarcass();
 
